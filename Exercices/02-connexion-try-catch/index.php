@@ -39,12 +39,22 @@ try{
 // de type select qui va dans un objet
 // de type PDOStatment
 $request = $db->query("
-SELECT * FROM `countries` 
-    ORDER BY `countries`.`population` DESC;
+SELECT 
+    c.`nom`, c.`population`, c.`continent`, c.`capitale`
+ FROM `countries` c 
+    ORDER BY c.`population` DESC;
  ");
 
  // on récupère nos données immédiatement
  $results = $request->fetchAll(PDO::FETCH_ASSOC);
+
+ // bonne pratique
+ // fermeture du curseur
+ $request->closeCursor();
+
+ // bonne pratique
+ // fermeture de la connexion
+ $db = null;
 
  /* création d'un json
  $json = json_encode($results);
@@ -53,4 +63,38 @@ SELECT * FROM `countries`
  fclose($create);
  */
 
-var_dump($db,$request,$results);
+//var_dump($db,$request,$results);
+?><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Les pays du monde</title>
+</head>
+<body>
+    <h1>Les pays du monde</h1>
+    <table>
+        <thead>
+            <tr>
+                <td>Pays</td>
+                <td>Population</td>
+                <td>Capitale</td>
+            </tr>
+        </thead>
+        <tbody>
+        <?php
+        // tant qu'on a des pays
+        foreach($results as $item):
+        ?>
+        <tr>
+            <td><span title="<?= $item['continent'] ?>"><?= $item['nom'] ?></span></td>
+            <td><?= $item['population'] ?></td>
+            <td><?= $item['capitale'] ?></td>
+        </tr>
+        <?php
+        endforeach;
+        ?>
+        </tbody>
+    </table>
+</body>
+</html>
