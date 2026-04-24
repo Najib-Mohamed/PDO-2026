@@ -1,0 +1,2 @@
+<?php
+# stagiaires/M
