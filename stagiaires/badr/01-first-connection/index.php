@@ -10,6 +10,8 @@
    <style>
     *{
         background-color: beige;
+        margin: 20px;
+        text-align: justify;
     }
     h1{
         text-align:center;
