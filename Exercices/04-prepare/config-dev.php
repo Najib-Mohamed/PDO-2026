@@ -11,3 +11,6 @@ const DB_CONNECT_USER = "root";
 const DB_CONNECT_PWD = "";
 // pour raccourcir la connexion
 const MARIA_DSN = DB_CONNECT_TYPE.":host=".DB_CONNECT_HOST. ";dbname=".DB_CONNECT_NAME.";port=".DB_CONNECT_PORT.";charset=".DB_CONNECT_CHARSET.";";
+
+// chemin vers la racine du projet
+const ROOT_PROJECT = __DIR__;
