@@ -109,7 +109,7 @@ $connectDB = null;
     </form>
     <div>
     <?php
-    // Pas de messahe postés
+    // Pas de message postés
     if(isset($message)):
     ?>
     <h3><?= $message ?></h3>
