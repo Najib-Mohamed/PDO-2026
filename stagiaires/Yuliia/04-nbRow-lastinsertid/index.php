@@ -71,7 +71,7 @@ $connectDB = null;
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Livre d'or</title>
-    <style>
+     <style>
 *{
     box-sizing: border-box;
     font-family: Arial, sans-serif;
@@ -83,11 +83,11 @@ body{
     text-align: center;
     padding-top: 50px;
     color: #333;
-}
+}  
 .reponse{
 max-width: 500px;
 margin: 0 auto;
-background-color: rgba(123, 178, 241, 0.7);
+background-color: rgba(123, 178, 241, 0.6);
 padding: 10px;
 margin-bottom: 20px;
 box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
