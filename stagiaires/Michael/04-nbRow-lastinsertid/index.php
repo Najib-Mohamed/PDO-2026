@@ -42,21 +42,24 @@ if(isset($_POST['email_message'],$_POST['texte_message'])){
         
         // préparation de la requête (pour s'habituer ;-)
         $sql = "INSERT INTO `message` (`email_message`,`texte_message`) 
-                VALUES ('$email','$text');";
+                VALUES ('$email','$text') ;";
         // exécution de l'insertion qui contiendra le nombre
         // de lignes affectées par la requête
         $nb_affected_line = $connectDB->exec($sql);
+
+        // on veut récupérer le dernier id inséré (par vous sur 1 insertion)
+        $last_insert_id = $connectDB->lastInsertId();
         
         // si au moins une ligne est affectée (1 == true, 0 ==false)
         if($nb_affected_line)
-            $thanks = "Merci pour l'ajout";
+            $thanks = "Merci pour l'ajout de l'ID $last_insert_id  : $nb_affected_line ligne";
     }
 
 
 }
 
 // on récupère les messages
-$request = $connectDB->query("SELECT * FROM `message`");
+$request = $connectDB->query("SELECT * FROM `message` ORDER BY `date_message` DESC;");
 
 // on compte le nombre de message(s) affecté(s) ici récupéré(s)
 $nbMessage = $request->rowCount();
@@ -127,7 +130,7 @@ $connectDB = null;
         foreach($results as $result):
     ?>
     <div class="reponse">
-        <h5><?= $result['email_message'] ?> a écrit à <?= $result['date_message'] ?></h5>
+        <h5>ID : <?=  $result['id_message'] ?> | <?= $result['email_message'] ?> a écrit à <?= $result['date_message'] ?></h5>
         <p><?= nl2br(htmlspecialchars($result['texte_message'])); // retour atomatique à la ligne ?></p>
         <hr>
     </div>
