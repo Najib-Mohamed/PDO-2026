@@ -37,12 +37,15 @@ if (isset($_POST['email_message'], $_POST['texte_message'])) {
         // exécution de l'insertion qui contiendra le nombre de ligne affectées par la requete
         $nb_affected_line = $connectDB->exec($sql);
 
+        // on veut pécupérer 
+        $last_insert_id=$connectDB->lastInsertId();
+
         // si au mois une ligne est affecteé (1== true 0== false)
-        if ($nb_affected_line) $thanks = "Merci pour l'ajout!";
+        if ($nb_affected_line) $thanks = "Merci pour l'ajout de l'ID $last_insert_id : $nb_affected_line line";
     }
 }
 // on récupére les messages
-$request = $connectDB->query("SELECT * FROM `message`");
+$request = $connectDB->query("SELECT * FROM `message` ORDER BY `date_message` DESC");
 
 // on compte le nobre de message(s) affecté(s) ici récupéré(s)
 $nbMessage = $request->rowCount();
@@ -68,18 +71,27 @@ $connectDB = null;
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Livre d'or</title>
-    <style>
+     <style>
 *{
     box-sizing: border-box;
     font-family: Arial, sans-serif;
 }
  
 body{
-    margin: 0;
+    margin: 0 auto;
     background: #f2f4f8;
     text-align: center;
     padding-top: 50px;
     color: #333;
+}  
+.reponse{
+max-width: 500px;
+margin: 0 auto;
+background-color: rgba(123, 178, 241, 0.6);
+padding: 10px;
+margin-bottom: 20px;
+box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+border-radius: 8px;
 }
  
 form{
@@ -174,7 +186,7 @@ input[type="submit"]{
             ?>
 
                 <div class="reponse">
-                    <h5> <?= $result['email_message'] ?> a écrit à <?= $result['date_message'] ?></h5>
+                    <h5>ID: <?= $result['id_message'] ?> | <?= $result['email_message'] ?> a écrit à <?= $result['date_message'] ?></h5>
                     <p><?= nl2br(htmlspecialchars($result['texte_message'])); // retour automatique à la ligne 
                         ?></p>
                 </div>
