@@ -35,7 +35,20 @@ if(isset($_POST['email'],$_POST['title'],$_POST['text'])){
         $erreur = "Bien essayé, <a href='javascript:history.go(-1)'>recommence</a>";
     }else{
         // exécution de la requête
-        $bdd->exec("INSERT INTO `livre` (`email`,`title`,`text`) VALUES ('$mail','$title','$text');");
+        $nbRow = $bdd->exec("INSERT INTO `livre` (`email`,`title`,`text`) VALUES ('$mail','$title','$text');");
+
+        // notre résultat vaut 1 ($nbRow==1;$nbRow==true;$nbRow;)
+        if($nbRow)
+            $reussite = "<h3>Merci pour votre message dont l'id est {$bdd->lastInsertId()}</h3> <script> 
+            // redirection js
+            setTimeout(
+            () => {
+                window.location.href='./';
+            }
+            , '3000'
+                ); 
+            </script>";
+        
     }
 }
 
@@ -44,6 +57,16 @@ $sql = "SELECT * FROM `livre` ORDER BY `datetime` ASC;";
 $request = $bdd->query($sql);
 // on va compter le nombre de résultat
 $nbArticle = $request->rowCount();
+
+// transformation du ou des résultats en tableau indexé contenant
+// des tableaux associatifs (lisible par PHP)
+$articles = $request->fetchAll(PDO::FETCH_ASSOC);
+
+// bonne pratique
+$request->closeCursor();
+// bonne pratique DB
+$bdd = null;
+
 // si pas au moins un article
 if($nbArticle===0){
     $message = "Pas encore de commentaires";
@@ -54,10 +77,7 @@ if($nbArticle===0){
 }
 
 
-// bonne pratique
-$request->closeCursor();
-// bonne pratique DB
-$bdd = null;
+
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -66,68 +86,13 @@ $bdd = null;
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Livre d'or</title>
     
-<style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f4f4f4;
-    }
-
-    form {
-      max-width: 400px;
-      margin: 50px auto;
-      background: #ffffff;
-      padding: 20px;
-      border-radius: 6px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    }
-
-    .messages {
-        margin: 50px auto;
-        width: 100%;
-        display: flex;
-        justify-content: center;
-    }
-
-    label {
-      display: block;
-      margin-bottom: 5px;
-      font-weight: bold;
-    }
-
-    input, textarea {
-      width: 100%;
-      padding: 8px;
-      margin-bottom: 15px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      font-size: 14px;
-    }
-
-    textarea {
-      resize: vertical;
-      min-height: 100px;
-    }
-
-    button {
-      width: 100%;
-      padding: 10px;
-      background: #007bff;
-      color: #fff;
-      border: none;
-      border-radius: 4px;
-      font-size: 16px;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background: #0056b3;
-    }
-  </style>
-
+    <link rel="stylesheet" href="style.css">
+    
 </head>
 <body>
     <h1>Livre d'or</h1>
 <?php if(isset($erreur)) echo $erreur ?>
+<?php if(isset($reussite)) echo $reussite ?>
 <form method='POST'>
     <label for="email">Email</label>
     <input type="email" id="email" name="email" required>
@@ -142,6 +107,17 @@ $bdd = null;
   </form>
 <div class='messages'>
     <h3><?= $message ?></h3>
+    <?php
+    foreach($articles as $article):
+    ?>
+        <div class="message">
+            <h4><?= $article['id'] ?>) <?= $article['title'] ?></h4>
+            <p>Ecrit par <?= $article['email'] ?> le <?= date("d/m/Y \à H\hi",strtotime($article['datetime'])) ?></p>
+            <p><?= htmlspecialchars($article['text']) ?></p>
+        </div>
+    <?php
+    endforeach;
+    ?>
 </div>
 </body>
 </html>
