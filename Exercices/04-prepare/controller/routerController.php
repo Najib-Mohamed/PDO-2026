@@ -11,7 +11,7 @@ if(isset($_POST['email'],$_POST['title'],$_POST['text'])){
 }
 
 // on prend les messages
-$livres = readLivres();
+$livres = readLivres($db);
 
 // Appel de la vue
 include ROOT_PROJECT."/view/homepage.view.php";
