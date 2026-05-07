@@ -51,10 +51,11 @@
         <?php  var_dump($_POST); ?>
 
             <div class="message"><?= $livres ?></div>
-            <div class="comments">Nombre de commentaires :
+            <div class="comments">Nombre de commentaires : on affiche le nombre de commentaire avec | Pas encore de commentaire | Il y a 1 commentaire | Il y a x commentaires
     </div>
     <div class="comments-list">
             <div class="commentaires-utilisateur">
+                On fait une boucle tant u'on a des commentaires
                 <h3></h3>
                 <p></p>
                 <p></p>

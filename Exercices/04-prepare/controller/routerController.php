@@ -10,6 +10,7 @@ if(isset($_POST['email'],$_POST['title'],$_POST['text'])){
     $insert = insertLivre($db, $_POST);
 }
 
+// on prend les messages
 $livres = readLivres();
 
 // Appel de la vue
