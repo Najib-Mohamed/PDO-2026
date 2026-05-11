@@ -42,6 +42,10 @@ function insertLivre(PDO $con, array $datas): bool
 }
 
 
-function readLivres(){
-    return "Nos Livres";
+function readLivres(PDO $con): array
+{
+    $sql = "SELECT * FROM `livre` ORDER BY `datetime` DESC;";
+    $prepare = $con->prepare($sql);
+    $prepare->execute();
+    return $prepare->fetchAll(PDO::FETCH_ASSOC);
 }
